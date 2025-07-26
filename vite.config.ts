@@ -31,8 +31,8 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: process.env.NODE_ENV === 'production' ? '/todo_list/' : '/',
+        start_url: process.env.NODE_ENV === 'production' ? '/todo_list/' : '/',
         icons: [
           {
             src: 'favicon.svg',
