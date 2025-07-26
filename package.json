@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "check": "vue-tsc -b",
     "lint": "eslint . --ext .ts,.vue",
-    "lint:fix": "eslint . --ext .ts,.vue --fix"
+    "lint:fix": "eslint . --ext .ts,.vue --fix",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@vueuse/core": "^13.5.0",
