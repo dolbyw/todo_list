@@ -36,41 +36,85 @@ export function useStore() {
    * 初始化应用
    */
   const initApp = async () => {
+    console.log('[useStore] initApp called')
+    
     try {
+      // 初始化存储服务
+      console.log('[useStore] Initializing storage service...')
       await storageService.init()
+      console.log('[useStore] Storage service initialized successfully')
       
       // 加载数据
+      console.log('[useStore] Loading data...')
       const [loadedTasks, loadedLists, loadedSettings] = await Promise.all([
         storageService.getTasks(),
         storageService.getLists(),
         storageService.getSettings()
       ])
-
-      tasks.value = loadedTasks
-      lists.value = loadedLists
       
+      console.log('[useStore] Data loaded:', {
+        tasks: loadedTasks.length,
+        lists: loadedLists.length,
+        settings: loadedSettings
+      })
+      
+      // 设置任务
+      tasks.value = loadedTasks
+      console.log('[useStore] Tasks set:', tasks.value.length)
+      
+      // 设置列表
+      if (loadedLists.length === 0) {
+        console.log('[useStore] No lists found, creating default list...')
+        // 如果没有列表，创建默认列表
+         const defaultList: TaskList = {
+           id: generateId(),
+           name: '我的任务',
+           description: '默认任务列表',
+           color: '#3b82f6',
+           createdAt: new Date(),
+           updatedAt: new Date()
+         }
+        
+        await storageService.saveList(defaultList)
+        lists.value = [defaultList]
+        currentListId.value = defaultList.id
+        console.log('[useStore] Default list created:', defaultList.id)
+      } else {
+        lists.value = loadedLists
+        currentListId.value = loadedLists[0].id
+        console.log('[useStore] Lists loaded, current list:', currentListId.value)
+      }
+      
+      // 设置应用设置
       if (loadedSettings) {
         settings.value = { ...defaultSettings, ...loadedSettings }
+        console.log('[useStore] Settings loaded')
+      } else {
+        console.log('[useStore] No settings found, using defaults')
       }
-
-      // 不再自动创建默认列表，让用户手动创建
-      // 如果有列表，设置当前列表为第一个
-      if (lists.value.length > 0 && !currentListId.value) {
-        currentListId.value = lists.value[0].id
-      }
-
+      
       // 配置WebDAV
+      console.log('[useStore] Configuring WebDAV...')
       webdavService.configure(settings.value.webdav)
-
+      
       isInitialized.value = true
+      console.log('[useStore] App initialized successfully, isInitialized:', isInitialized.value)
       
       // 如果启用了自动同步，执行同步
       if (settings.value.autoSync && settings.value.webdav.enabled) {
         await syncData()
       }
     } catch (error) {
-      console.error('Failed to initialize app:', error)
-      toast.error('应用初始化失败')
+      console.error('[useStore] Failed to initialize app:', error)
+      console.error('[useStore] Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      })
+      isInitialized.value = false
+      
+      // 显示用户友好的错误信息
+      toast.error('应用初始化失败，请刷新页面重试')
     }
   }
 
