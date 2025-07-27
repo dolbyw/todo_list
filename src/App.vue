@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import { RouterView } from 'vue-router'
 import { Toaster } from 'vue-sonner'
 import { useTheme } from './composables/useTheme'
+import { useFontManager } from './composables/useFontManager'
+import { useStore } from './composables/useStore'
 
 const { isDark } = useTheme()
+const { settings } = useStore()
+const { watchFontSettings } = useFontManager()
+
+// 初始化字体管理
+watchFontSettings(computed(() => settings.value.fontFamily))
 
 // 雪花特效相关状态
 const snowCanvas = ref<HTMLCanvasElement>()

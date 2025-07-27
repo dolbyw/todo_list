@@ -120,6 +120,37 @@
         显示设置
       </h3>
       
+      <!-- 字体设置 -->
+      <div class="space-y-3">
+        <div class="text-sm font-medium text-gray-200">
+          字体选择
+        </div>
+        <div class="space-y-2">
+          <div 
+            v-for="font in fontOptions" 
+            :key="font.value"
+            @click="localSettings.fontFamily = font.value"
+            class="liquid-glass flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105"
+            :class="{
+              'liquid-button': localSettings.fontFamily === font.value,
+              'opacity-60': localSettings.fontFamily !== font.value
+            }"
+          >
+            <div class="flex flex-col">
+              <span class="text-sm font-medium text-white">{{ font.label }}</span>
+              <span class="text-xs text-gray-300">{{ font.description }}</span>
+            </div>
+            <div 
+              v-if="localSettings.fontFamily === font.value"
+              class="w-2 h-2 bg-blue-500 rounded-full"
+            ></div>
+          </div>
+        </div>
+        <div class="text-xs text-gray-300">
+          选择应用的默认字体，更改后立即生效
+        </div>
+      </div>
+      
       <!-- 完成进度显示范围 -->
       <div class="space-y-3">
         <div class="text-sm font-medium text-gray-200">
@@ -206,10 +237,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { X, Wifi, CheckCircle, XCircle, Download, Upload } from 'lucide-vue-next'
 import type { AppSettings } from '../types'
 import { useStore } from '../composables/useStore'
+import { useFontManager } from '../composables/useFontManager'
 import { storageService } from '../services/storage'
 import { toast } from 'vue-sonner'
 
@@ -227,10 +259,21 @@ const {
   testWebDAVConnection
 } = useStore()
 
+// 字体管理
+const { fontOptions, applyFont } = useFontManager()
+
 // 本地设置副本
 const localSettings = reactive<AppSettings>({
   ...settings.value
 })
+
+// 监听字体设置变化，实时预览
+watch(
+  () => localSettings.fontFamily,
+  (newFont) => {
+    applyFont(newFont)
+  }
+)
 
 // 连接测试状态
 const isTestingConnection = ref(false)
@@ -291,7 +334,8 @@ const saveSettings = async () => {
       enabled: localSettings.webdav.enabled
     },
     autoSync: localSettings.autoSync,
-    progressScope: localSettings.progressScope
+    progressScope: localSettings.progressScope,
+    fontFamily: localSettings.fontFamily
   }
   
   try {

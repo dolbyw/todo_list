@@ -16,7 +16,8 @@ const defaultSettings: AppSettings = {
     enabled: false
   },
   autoSync: false,
-  progressScope: 'current' // 默认显示当前列表的完成进度
+  progressScope: 'current', // 默认显示当前列表的完成进度
+  fontFamily: 'MiSans' // 默认使用MiSans字体
 }
 
 // 全局状态

@@ -46,12 +46,16 @@ export interface WebDAVConfig {
   enabled: boolean
 }
 
+// 字体选项枚举
+export type FontFamily = 'MiSans' | 'Inter' | 'System'
+
 // 应用设置接口
 export interface AppSettings {
   theme: 'light' | 'dark'
   webdav: WebDAVConfig
   autoSync: boolean
   progressScope: 'all' | 'current' // 完成进度显示范围：全部任务或当前列表
+  fontFamily: FontFamily // 字体设置
 }
 
 // 同步状态枚举
