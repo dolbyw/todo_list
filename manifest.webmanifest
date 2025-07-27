@@ -1,0 +1,1 @@
+{"name":"Todo App - 待办事项管理","short_name":"Todo App","description":"简洁、美观、流畅的待办事项管理工具，支持离线使用和WebDAV同步","start_url":"/todo_list/","display":"standalone","background_color":"#ffffff","theme_color":"#3b82f6","lang":"en","scope":"/todo_list/","orientation":"portrait","icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
