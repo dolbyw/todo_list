@@ -16,12 +16,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-screen bg-gray-100 dark:bg-gray-900">
+  <div class="h-screen relative">
     <!-- 可调整大小的面板布局 -->
     <ResizablePanel 
       :initial-left-width="280"
       :min-left-width="200"
       :max-left-width="500"
+      class="relative z-20"
     >
       <!-- 左侧侧边栏 -->
       <template #left>
@@ -41,7 +42,7 @@ onMounted(async () => {
     >
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600 dark:text-gray-400">正在加载应用...</p>
+        <p class="text-gray-200">正在加载应用...</p>
       </div>
     </div>
   </div>

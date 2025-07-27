@@ -1,31 +1,31 @@
 <template>
-  <div class="h-full flex flex-col bg-white dark:bg-gray-800">
+  <div class="h-full flex flex-col bg-white/50 dark:bg-black/50">
     <!-- 头部 -->
     <div class="p-4 border-b border-gray-200 dark:border-gray-700">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+        <h2 class="text-2xl font-bold text-white">
           {{ currentList?.name || '选择一个列表' }}
         </h2>
         <div class="flex items-center space-x-2">
-          <span class="text-sm text-gray-500 dark:text-gray-400">
+          <span class="text-sm text-gray-100 font-medium">
             {{ currentTasks.length }} 个任务 / {{ completedTasks }} 已完成
           </span>
           <button
             @click="showHelp = !showHelp"
-            class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg transition-colors"
+            class="liquid-glass liquid-button p-2 text-white rounded-lg transition-colors"
             title="帮助"
           >
             <HelpCircle class="w-5 h-5" />
           </button>
           <button
             @click="showSettings = !showSettings"
-            class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg transition-colors"
+            class="liquid-glass liquid-button p-2 text-white rounded-lg transition-colors"
             title="设置"
           >
             <Settings class="w-5 h-5" />
           </button>
-          <!-- 主题切换按钮 -->
-          <ThemeToggle />
+          <!-- 雪花控制按钮 -->
+          <SnowControl />
         </div>
       </div>
 
@@ -60,11 +60,11 @@
           v-model="newTaskTitle"
           type="text"
           placeholder="添加新任务..."
-          class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          class="liquid-glass liquid-input flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-300"
         />
         <select
           v-model="newTaskPriority"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          class="liquid-glass liquid-select px-3 py-2 rounded-lg text-gray-900 dark:text-white"
         >
           <option :value="TaskPriority.MEDIUM">中优先级</option>
           <option :value="TaskPriority.HIGH">高优先级</option>
@@ -72,7 +72,8 @@
         </select>
         <button
           type="submit"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 active:scale-95"
+          :disabled="!newTaskTitle.trim()"
+          class="liquid-glass liquid-button px-6 py-3 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 font-medium"
           title="添加任务"
         >
           <Plus class="w-5 h-5" />
@@ -85,7 +86,7 @@
       <div class="flex flex-wrap gap-2">
         <select
           v-model="filterBy"
-          class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="liquid-glass liquid-select px-3 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">全部任务</option>
           <option value="pending">未完成</option>
@@ -94,7 +95,7 @@
         
         <select
           v-model="sortBy"
-          class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="liquid-glass liquid-select px-3 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="high">高优先级</option>
           <option value="medium">中优先级</option>
@@ -108,10 +109,10 @@
     <!-- 任务列表 -->
     <div class="flex-1 overflow-y-auto p-4">
       <div v-if="filteredAndSortedTasks.length === 0" class="text-center py-12">
-        <div class="text-gray-400 dark:text-gray-500">
-          <CheckCircle class="w-16 h-16 mx-auto mb-4 opacity-50" />
-          <p class="text-lg font-medium mb-2">{{ currentTasks.length === 0 ? '还没有任务' : '没有符合条件的任务' }}</p>
-          <p class="text-sm">{{ currentTasks.length === 0 ? '添加第一个任务开始吧！' : '尝试调整筛选条件' }}</p>
+        <div class="text-gray-100">
+          <CheckCircle class="w-16 h-16 mx-auto mb-4 opacity-60" />
+          <p class="text-lg font-medium mb-2 text-white">{{ currentTasks.length === 0 ? '还没有任务' : '没有符合条件的任务' }}</p>
+          <p class="text-sm text-gray-200">{{ currentTasks.length === 0 ? '添加第一个任务开始吧！' : '尝试调整筛选条件' }}</p>
         </div>
       </div>
       
@@ -119,7 +120,7 @@
         <div
           v-for="task in filteredAndSortedTasks"
           :key="task.id"
-          class="group p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
+          class="liquid-glass group p-4 rounded-lg transition-all duration-200 hover:scale-[1.02]"
           :class="{
             'opacity-60': task.status === 'completed',
             'border-l-4 border-l-red-500': task.priority === 'high',
@@ -136,7 +137,7 @@
               <div
                 :class="{
                   'bg-green-500 border-green-500': task.status === 'completed',
-                  'bg-transparent border-gray-300 dark:border-gray-600': task.status === 'pending'
+                  'liquid-glass border-gray-300 dark:border-gray-600': task.status === 'pending'
                 }"
                 class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200"
               >
@@ -156,7 +157,7 @@
                   v-model="editTaskTitle"
                   type="text"
                   placeholder="任务标题"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-600 text-gray-900 dark:text-white"
+                  class="liquid-glass liquid-input w-full px-3 py-2 rounded-lg text-gray-900 dark:text-white"
                   @keyup.enter="saveTaskEdit(task.id)"
                   @keyup.escape="cancelTaskEdit"
                 />
@@ -164,19 +165,19 @@
                   v-model="editTaskContent"
                   placeholder="任务内容描述（可选）"
                   rows="3"
-                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-600 text-gray-900 dark:text-white resize-none"
+                  class="liquid-glass liquid-input w-full px-3 py-2 rounded-lg text-gray-900 dark:text-white resize-none"
                   @keyup.escape="cancelTaskEdit"
                 ></textarea>
                 <div class="flex gap-2">
                   <button
                     @click="saveTaskEdit(task.id)"
-                    class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                    class="liquid-glass liquid-button px-3 py-1 text-sm text-white rounded transition-colors"
                   >
                     保存
                   </button>
                   <button
                     @click="cancelTaskEdit"
-                    class="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                    class="liquid-glass liquid-button px-3 py-1 text-sm text-white rounded transition-colors"
                   >
                     取消
                   </button>
@@ -186,16 +187,16 @@
               <!-- 显示模式 -->
               <div v-else>
                 <h3
-                  class="font-medium text-gray-900 dark:text-white"
-                  :class="{ 'line-through': task.status === 'completed' }"
+                  class="font-medium text-white font-semibold"
+                  :class="{ 'line-through opacity-70': task.status === 'completed' }"
                 >
                   {{ task.title }}
                 </h3>
                 <!-- 任务内容 -->
                 <div v-if="task.content && task.content.trim()" class="mt-2">
-                  <p
-                    class="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap"
-                    :class="{ 'line-through': task.status === 'completed' }"
+          <p
+                    class="text-sm text-gray-100 whitespace-pre-wrap"
+                    :class="{ 'line-through opacity-70': task.status === 'completed' }"
                   >
                     {{ task.content }}
                   </p>
@@ -219,14 +220,14 @@
             <div v-if="editingTaskId !== task.id" class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <button
                 @click="startEditTask(task)"
-                class="p-2 text-gray-400 hover:text-blue-500 transition-colors duration-200 hover:scale-110"
+                class="liquid-glass liquid-button p-2 text-white transition-colors duration-200 hover:scale-110 rounded"
                 title="编辑任务"
               >
                 <Edit2 class="w-4 h-4" />
               </button>
               <button
                 @click="deleteTask(task.id)"
-                class="p-2 text-gray-400 hover:text-red-500 transition-colors duration-200 hover:scale-110"
+                class="liquid-glass liquid-button p-2 text-white transition-colors duration-200 hover:scale-110 rounded"
                 title="删除任务"
               >
                 <Trash2 class="w-4 h-4" />
@@ -235,7 +236,7 @@
           </div>
           
           <!-- 时间标记 -->
-          <div class="mt-3 pt-2 border-t border-gray-100 dark:border-gray-600 flex justify-between text-xs text-gray-500 dark:text-gray-400">
+          <div class="mt-3 pt-2 border-t border-gray-100 dark:border-gray-600 flex justify-between text-xs text-gray-200">
             <span>创建: {{ formatDate(task.createdAt) }}</span>
             <span v-if="task.status === 'completed' && task.completedAt">完成: {{ formatDate(task.completedAt) }}</span>
           </div>
@@ -251,7 +252,7 @@ import { Plus, CheckCircle, Edit2, Trash2, HelpCircle, Settings } from 'lucide-v
 import { useStore } from '../composables/useStore'
 import { TaskPriority } from '../types'
 import SettingsPanel from './SettingsPanel.vue'
-import ThemeToggle from './ThemeToggle.vue'
+import SnowControl from './SnowControl.vue'
 
 const store = useStore()
 const { currentList, currentTasks, createTask, updateTask, deleteTask, toggleTaskStatus } = store

@@ -1,13 +1,12 @@
 import { ref, computed, watch } from 'vue'
 
-let theme = ref<'light' | 'dark'>('light')
+let theme = ref<'light' | 'dark'>('dark')
 
-// 初始化主题
+// 初始化主题 - 默认夜间模式
 const initTheme = () => {
-  const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
-  if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-    theme.value = savedTheme
-  }
+  // 强制设置为夜间模式，不再从localStorage读取
+  theme.value = 'dark'
+  localStorage.setItem('theme', 'dark')
 }
 
 export const useTheme = () => {

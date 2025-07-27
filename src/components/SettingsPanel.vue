@@ -2,12 +2,12 @@
   <div class="space-y-6">
     <!-- 头部 -->
     <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+      <h2 class="text-xl font-semibold text-white">
         设置
       </h2>
       <button
         @click="emit('close')"
-        class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        class="p-2 text-gray-200 hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       >
         <X class="w-5 h-5" />
       </button>
@@ -16,7 +16,7 @@
     <!-- WebDAV设置 -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+        <h3 class="text-lg font-medium text-white">
           WebDAV 同步
         </h3>
         <label class="relative inline-flex items-center cursor-pointer">
@@ -25,44 +25,44 @@
             type="checkbox"
             class="sr-only peer"
           />
-          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <div class="liquid-toggle w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
         </label>
       </div>
 
       <div v-if="localSettings.webdav.enabled" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label class="block text-sm font-medium text-gray-200 mb-2">
             服务器地址
           </label>
           <input
             v-model="localSettings.webdav.url"
             type="url"
             placeholder="https://your-webdav-server.com/dav"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="liquid-glass liquid-input w-full px-3 py-2 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label class="block text-sm font-medium text-gray-200 mb-2">
             用户名
           </label>
           <input
             v-model="localSettings.webdav.username"
             type="text"
             placeholder="用户名"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="liquid-glass liquid-input w-full px-3 py-2 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label class="block text-sm font-medium text-gray-200 mb-2">
             密码
           </label>
           <input
             v-model="localSettings.webdav.password"
             type="password"
             placeholder="密码"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="liquid-glass liquid-input w-full px-3 py-2 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
         </div>
 
@@ -71,7 +71,7 @@
           <button
             @click="testConnection"
             :disabled="isTestingConnection || !canTestConnection"
-            class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="liquid-glass liquid-button flex items-center gap-2 px-4 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Wifi 
               class="w-4 h-4" 
@@ -95,10 +95,10 @@
         <!-- 自动同步 -->
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <div class="text-sm font-medium text-gray-200">
               自动同步
             </div>
-            <div class="text-xs text-gray-500 dark:text-gray-400">
+            <div class="text-xs text-gray-300">
               应用启动时自动同步数据
             </div>
           </div>
@@ -108,7 +108,7 @@
               type="checkbox"
               class="sr-only peer"
             />
-            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <div class="liquid-toggle w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
           </label>
         </div>
       </div>
@@ -116,38 +116,38 @@
 
     <!-- 显示设置 -->
     <div class="space-y-4">
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+      <h3 class="text-lg font-medium text-white">
         显示设置
       </h3>
       
       <!-- 完成进度显示范围 -->
       <div class="space-y-3">
-        <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div class="text-sm font-medium text-gray-200">
           完成进度显示范围
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button
             @click="localSettings.progressScope = 'current'"
-            class="flex items-center justify-center gap-2 p-3 border rounded-lg transition-all duration-200 hover:scale-105"
+            class="liquid-glass flex items-center justify-center gap-2 p-3 rounded-lg transition-all duration-200 hover:scale-105 text-white"
             :class="{
-              'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md': localSettings.progressScope === 'current',
-              'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500': localSettings.progressScope !== 'current'
+              'liquid-button': localSettings.progressScope === 'current',
+              'opacity-60': localSettings.progressScope !== 'current'
             }"
           >
             <span class="text-sm font-medium">当前列表</span>
           </button>
           <button
             @click="localSettings.progressScope = 'all'"
-            class="flex items-center justify-center gap-2 p-3 border rounded-lg transition-all duration-200 hover:scale-105"
+            class="liquid-glass flex items-center justify-center gap-2 p-3 rounded-lg transition-all duration-200 hover:scale-105 text-white"
             :class="{
-              'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md': localSettings.progressScope === 'all',
-              'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500': localSettings.progressScope !== 'all'
+              'liquid-button': localSettings.progressScope === 'all',
+              'opacity-60': localSettings.progressScope !== 'all'
             }"
           >
             <span class="text-sm font-medium">全部任务</span>
           </button>
         </div>
-        <div class="text-xs text-gray-500 dark:text-gray-400">
+        <div class="text-xs text-gray-300">
           选择在侧边栏底部显示当前列表还是全部任务的完成进度
         </div>
       </div>
@@ -155,14 +155,14 @@
 
     <!-- 数据管理 -->
     <div class="space-y-4">
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+      <h3 class="text-lg font-medium text-white">
         数据管理
       </h3>
       
       <div class="space-y-3">
         <button
           @click="exportData"
-          class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          class="liquid-glass liquid-button w-full flex items-center justify-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
         >
           <Download class="w-4 h-4" />
           导出数据
@@ -170,7 +170,7 @@
         
         <button
           @click="importData"
-          class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          class="liquid-glass liquid-button w-full flex items-center justify-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
         >
           <Upload class="w-4 h-4" />
           导入数据
@@ -182,13 +182,13 @@
     <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
       <button
         @click="emit('close')"
-        class="px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+        class="liquid-glass liquid-button px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
       >
         取消
       </button>
       <button
         @click="saveSettings"
-        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        class="liquid-glass liquid-button px-4 py-2 text-white rounded-lg transition-colors"
       >
         保存设置
       </button>

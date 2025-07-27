@@ -1,16 +1,7 @@
 <template>
-  <div class="h-full flex flex-col bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+  <div class="h-full flex flex-col bg-white/50 dark:bg-black/50 border-r border-gray-200 dark:border-gray-700">
     <!-- 头部区域 -->
-    <div class="relative p-4 border-b border-gray-200 dark:border-gray-700 overflow-hidden" ref="weatherContainer">
-      <!-- 雪花特效画布 -->
-      <canvas 
-        ref="snowCanvas" 
-        id="snow-effect-canvas"
-        class="absolute inset-0 pointer-events-none"
-        :width="canvasWidth"
-        :height="canvasHeight"
-      ></canvas>
-      
+    <div class="relative p-4 border-b border-gray-200 dark:border-gray-700 overflow-hidden">
       <!-- 内容层 -->
       <div class="relative z-10">
         <h1 class="text-xl font-bold mb-4 cursor-default select-none" ref="titleElement" :style="titleStyle">
@@ -24,17 +15,18 @@
             v-model="newListName"
             type="text"
             placeholder="新建列表..."
-            class="w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200"
+            class="liquid-glass liquid-input w-full pl-3 pr-12 py-2 rounded-lg text-white placeholder-gray-300 transition-all duration-200"
             @keyup.enter="handleAddList"
             @input="clearError"
+            maxlength="50"
           />
           <button
             @click="handleAddList"
             :disabled="isAddingList"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 text-gray-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-md hover:bg-white/10"
             title="添加列表"
           >
-            <Plus class="w-5 h-5" />
+            <Plus class="w-4 h-4" />
           </button>
         </div>
       
@@ -49,10 +41,10 @@
     <div class="flex-1 overflow-y-auto p-4">
       <!-- 空状态 -->
       <div v-if="lists.length === 0" class="text-center py-8">
-        <div class="text-gray-400 dark:text-gray-500">
-          <FolderPlus class="w-12 h-12 mx-auto mb-3 opacity-50" />
-          <p class="text-sm font-medium">还没有列表</p>
-          <p class="text-xs mt-1 opacity-75">创建第一个列表开始吧！</p>
+        <div class="text-gray-100">
+          <FolderPlus class="w-12 h-12 mx-auto mb-3 opacity-60" />
+          <p class="text-sm font-medium text-white">还没有列表</p>
+          <p class="text-xs mt-1 text-gray-200">创建第一个列表开始吧！</p>
         </div>
       </div>
       
@@ -61,7 +53,7 @@
         <div
           v-for="list in lists"
           :key="list.id"
-          class="group relative p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-white dark:hover:bg-gray-800 hover:shadow-sm border border-transparent"
+          class="liquid-glass group relative p-3 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-sm"
           :class="getListItemClasses(list.id)"
           @click="handleSelectList(list.id)"
         >
@@ -71,7 +63,7 @@
               ref="editInput"
               v-model="editListName"
               type="text"
-              class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
+              class="liquid-glass liquid-input w-full px-3 py-2 text-sm rounded-md text-white placeholder-gray-300 transition-all duration-200"
               @keyup.enter="handleSaveEdit(list.id)"
               @keyup.escape="handleCancelEdit"
               @blur="handleSaveEdit(list.id)"
@@ -80,14 +72,14 @@
               <button
                 @click="handleSaveEdit(list.id)"
                 :disabled="isSavingEdit"
-                class="flex-1 px-3 py-1.5 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="liquid-glass liquid-button flex-1 px-3 py-1.5 text-xs text-white rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {{ isSavingEdit ? '保存中...' : '保存' }}
               </button>
               <button
                 @click="handleCancelEdit"
                 :disabled="isSavingEdit"
-                class="flex-1 px-3 py-1.5 text-xs bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="liquid-glass liquid-button flex-1 px-3 py-1.5 text-xs text-white rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-red-500/20 border-red-400/30 hover:bg-red-500/30"
               >
                 取消
               </button>
@@ -104,21 +96,21 @@
               <div class="flex items-center space-x-3 flex-1 min-w-0">
                 <Folder class="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-medium text-gray-900 dark:text-white truncate" :title="list.name">
+                  <h3 class="font-medium text-white truncate" :title="list.name">
                     {{ list.name }}
                   </h3>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                  <p class="text-sm text-gray-100">
                     {{ getTaskCountText(list.id) }}
                   </p>
                 </div>
               </div>
               
-              <!-- 操作按钮 -->
-              <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200" @click.stop>
+              <!-- 操作按钮 - 只在非编辑状态下显示 -->
+              <div v-if="editingListId !== list.id" class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200" @click.stop>
                 <button
                   @click="handleStartEdit(list)"
                   :disabled="editingListId !== null"
-                  class="p-1.5 text-gray-400 hover:text-blue-500 transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  class="liquid-glass liquid-button p-1.5 text-white transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-md"
                   title="编辑列表名称"
                 >
                   <Edit2 class="w-4 h-4" />
@@ -126,7 +118,7 @@
                 <button
                   @click="handleDeleteList(list.id)"
                   :disabled="isDeletingList || lists.length <= 1"
-                  class="p-1.5 text-gray-400 hover:text-red-500 transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-md hover:bg-red-50 dark:hover:bg-red-900/20"
+                  class="liquid-glass liquid-button p-1.5 text-white transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-md bg-red-500/20 border-red-400/30 hover:bg-red-500/30"
                   :title="lists.length <= 1 ? '至少需要保留一个列表' : '删除列表'"
                 >
                   <Trash2 class="w-4 h-4" />
@@ -136,7 +128,7 @@
             
             <!-- 创建时间 -->
             <div class="mt-2 text-right">
-              <p class="text-xs text-gray-400 dark:text-gray-500">
+              <p class="text-xs text-gray-200">
                 {{ formatTime(list.createdAt) }}
               </p>
             </div>
@@ -147,10 +139,10 @@
 
     <!-- 底部统计信息 -->
     <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-      <div class="text-sm text-gray-500 dark:text-gray-400">
+      <div class="text-sm text-gray-100">
         <div class="flex justify-between items-center mb-2">
-          <span class="font-medium">{{ progressLabel }}</span>
-          <span class="font-mono">{{ completionPercentage }}%</span>
+          <span class="font-medium text-white">{{ progressLabel }}</span>
+          <span class="font-mono text-white">{{ completionPercentage }}%</span>
         </div>
         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
           <div
@@ -158,7 +150,7 @@
             :style="{ width: `${completionPercentage}%` }"
           ></div>
         </div>
-        <div class="mt-2 text-xs opacity-75">
+        <div class="mt-2 text-xs text-gray-200">
           {{ getProgressDetails() }}
         </div>
       </div>
@@ -179,7 +171,6 @@ const { lists, currentList, tasks, createList, updateList, deleteList, setCurren
 // 模板引用
 const newListInput = ref<HTMLInputElement>()
 const editInput = ref<HTMLInputElement>()
-const weatherContainer = ref<HTMLElement>()
 const titleElement = ref<HTMLElement>()
 
 // 响应式状态
@@ -191,13 +182,6 @@ const editErrorMessage = ref('')
 const isAddingList = ref(false)
 const isSavingEdit = ref(false)
 const isDeletingList = ref(false)
-
-// 雪花特效相关状态
-const snowCanvas = ref<HTMLCanvasElement>()
-const canvasWidth = ref(0)
-const canvasHeight = ref(0)
-let snowEffectActive = false
-let snowAnimationFrame: number | null = null
 
 // 标题霓虹灯效果相关状态
 const titleStyle = ref({})
@@ -214,111 +198,6 @@ const neonColors = [
   { color: '#80ff40', shadow: '0 0 10px #80ff40, 0 0 20px #80ff40, 0 0 30px #80ff40' },
   { color: '#4080ff', shadow: '0 0 10px #4080ff, 0 0 20px #4080ff, 0 0 30px #4080ff' }
 ]
-
-/**
- * 更新画布尺寸
- */
-const updateCanvasSize = () => {
-  if (!weatherContainer.value || !snowCanvas.value) return
-  
-  const rect = weatherContainer.value.getBoundingClientRect()
-  canvasWidth.value = rect.width
-  canvasHeight.value = rect.height
-  
-  snowCanvas.value.width = rect.width
-  snowCanvas.value.height = rect.height
-}
-
-/**
- * 初始化高级雪花特效
- */
-const initAdvancedSnowEffect = () => {
-  if (!snowCanvas.value) return
-  
-  const canvas = snowCanvas.value
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
-  
-  // 雪花参数
-  const snowflakes: Array<{
-    x: number
-    y: number
-    radius: number
-    speed: number
-    wind: number
-    opacity: number
-    angle: number
-  }> = []
-  
-  const maxSnowflakes = 80  // 减少粒子数量从150到80
-  
-  // 创建雪花
-  for (let i = 0; i < maxSnowflakes; i++) {
-    snowflakes.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      radius: Math.random() * 2.5 + 0.5,  // 减小粒子大小从4+1到2.5+0.5
-      speed: Math.random() * 1 + 0.3,     // 进一步降低速度从1.5+0.5到1+0.3
-      wind: Math.random() * 0.8 - 0.4,    // 进一步减少风力影响
-      opacity: Math.random() * 0.8 + 0.2,
-      angle: Math.random() * Math.PI * 2
-    })
-  }
-  
-  // 动画循环
-  const animate = () => {
-    if (!snowEffectActive) return
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    
-    snowflakes.forEach(flake => {
-      // 更新位置
-      flake.y += flake.speed
-      flake.x += flake.wind
-      flake.angle += 0.01
-      
-      // 边界检查
-      if (flake.y > canvas.height) {
-        flake.y = -10
-        flake.x = Math.random() * canvas.width
-      }
-      if (flake.x > canvas.width) {
-        flake.x = 0
-      } else if (flake.x < 0) {
-        flake.x = canvas.width
-      }
-      
-      // 绘制雪花
-      ctx.save()
-      ctx.globalAlpha = flake.opacity
-      ctx.translate(flake.x, flake.y)
-      ctx.rotate(flake.angle)
-      
-      // 绘制六角雪花
-      ctx.beginPath()
-      ctx.strokeStyle = '#ffffff'
-      ctx.lineWidth = 1
-      
-      for (let i = 0; i < 6; i++) {
-        ctx.moveTo(0, 0)
-        ctx.lineTo(0, -flake.radius * 2)
-        ctx.moveTo(0, -flake.radius)
-        ctx.lineTo(-flake.radius * 0.5, -flake.radius * 1.5)
-        ctx.moveTo(0, -flake.radius)
-        ctx.lineTo(flake.radius * 0.5, -flake.radius * 1.5)
-        ctx.rotate(Math.PI / 3)
-      }
-      
-      ctx.stroke()
-      ctx.restore()
-    })
-    
-    snowAnimationFrame = requestAnimationFrame(animate)
-  }
-  
-  snowEffectActive = true
-  animate()
-}
 
 /**
  * 随机更改标题颜色和霓虹灯效果
@@ -355,13 +234,6 @@ const initNeonEffect = () => {
  * 清理所有效果
  */
 const cleanupEffects = () => {
-  // 清理雪花效果
-  snowEffectActive = false
-  if (snowAnimationFrame) {
-    cancelAnimationFrame(snowAnimationFrame)
-    snowAnimationFrame = null
-  }
-  
   // 清理霓虹灯效果
   if (colorChangeInterval) {
     clearTimeout(colorChangeInterval)
@@ -509,9 +381,17 @@ const handleStartEdit = async (list: TaskList) => {
   editListName.value = list.name
   clearEditError()
   
+  // 等待DOM更新完成
   await nextTick()
-  editInput.value?.focus()
-  editInput.value?.select()
+  
+  // 添加额外的延迟确保input元素完全渲染
+  setTimeout(() => {
+    const inputElement = editInput.value
+    if (inputElement && typeof inputElement.focus === 'function') {
+      inputElement.focus()
+      inputElement.select()
+    }
+  }, 50)
 }
 
 /**
@@ -524,8 +404,15 @@ const handleSaveEdit = async (listId: string) => {
   if (validationError) {
     editErrorMessage.value = validationError
     await nextTick()
-    editInput.value?.focus()
-    editInput.value?.select()
+    
+    // 添加延迟确保input元素可用
+    setTimeout(() => {
+      const inputElement = editInput.value
+      if (inputElement && typeof inputElement.focus === 'function') {
+        inputElement.focus()
+        inputElement.select()
+      }
+    }, 50)
     return
   }
   
@@ -672,40 +559,20 @@ watch(newListName, () => {
   }
 })
 
-// 监听窗口大小变化
-const handleResize = () => {
-  updateCanvasSize()
-}
-
 // 生命周期钩子
 onMounted(() => {
   // 延迟初始化效果，确保DOM已渲染
   nextTick(() => {
     setTimeout(() => {
-      updateCanvasSize()
-      initAdvancedSnowEffect()
       initNeonEffect()
-      
-      // 监听窗口大小变化
-      window.addEventListener('resize', handleResize)
     }, 500)
   })
 })
 
 onUnmounted(() => {
   cleanupEffects()
-  window.removeEventListener('resize', handleResize)
 })
 </script>
 
 <style scoped>
-/* 确保雪花画布有正确的层级 */
-.weather-container {
-  position: relative;
-  z-index: 1;
-}
-
-#snow-effect-canvas {
-  z-index: 0;
-}
 </style>
