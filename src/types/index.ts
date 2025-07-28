@@ -47,7 +47,7 @@ export interface WebDAVConfig {
 }
 
 // 字体选项枚举
-export type FontFamily = 'MiSans' | 'Inter' | 'System'
+export type FontFamily = 'MiSans' | 'System'
 
 // 应用设置接口
 export interface AppSettings {

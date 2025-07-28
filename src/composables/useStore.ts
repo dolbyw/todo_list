@@ -28,18 +28,47 @@ const settings = useLocalStorage('todo-settings', defaultSettings)
 const syncStatus = ref<SyncStatus>(SyncStatus.IDLE)
 const lastSyncTime = ref<Date | null>(null)
 const isInitialized = ref(false)
+const loading = ref(false) // 新增 loading 状态
 
 /**
  * 应用状态管理组合函数
  */
 export function useStore() {
   /**
+   * 注册后台同步
+   */
+  const registerBackgroundSync = async () => {
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      try {
+        const registration = await navigator.serviceWorker.ready
+        await registration.sync.register('webdav-sync')
+        console.log('[useStore] Background sync for WebDAV registered')
+        toast.info('网络连接断开，已安排后台同步。连接恢复后将自动同步数据。')
+      } catch (error) {
+        console.error('[useStore] Background sync registration failed:', error)
+        toast.error('后台同步注册失败，离线更改可能无法自动同步。')
+      }
+    } else {
+      toast.error('您的浏览器不支持后台同步，离线时的数据更改可能不会被保存。')
+    }
+  }
+  /**
    * 初始化应用
    */
   const initApp = async () => {
+    if (isInitialized.value) return
+    loading.value = true
     console.log('[useStore] initApp called')
     
     try {
+      // 监听来自 Service Worker 的消息
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'SYNC_WEBDAV') {
+          console.log('[useStore] Received sync request from Service Worker')
+          syncData()
+        }
+      })
+
       // 初始化存储服务
       console.log('[useStore] Initializing storage service...')
       await storageService.init()
@@ -106,6 +135,7 @@ export function useStore() {
         await syncData()
       }
     } catch (error) {
+      loading.value = false
       console.error('[useStore] Failed to initialize app:', error)
       console.error('[useStore] Error details:', {
         name: error.name,
@@ -116,6 +146,8 @@ export function useStore() {
       
       // 显示用户友好的错误信息
       toast.error('应用初始化失败，请刷新页面重试')
+    } finally {
+      loading.value = false
     }
   }
 
@@ -384,7 +416,8 @@ export function useStore() {
     } catch (error) {
       console.error('Sync failed:', error)
       syncStatus.value = SyncStatus.ERROR
-      toast.error('同步失败')
+      // 如果同步失败，尝试注册后台同步
+      await registerBackgroundSync()
     }
   }
 
@@ -428,6 +461,7 @@ export function useStore() {
     syncStatus,
     lastSyncTime,
     isInitialized,
+    loading, // 导出 loading 状态
     
     // 计算属性
     currentList,

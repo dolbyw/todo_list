@@ -5,6 +5,7 @@ import { Toaster } from 'vue-sonner'
 import { useTheme } from './composables/useTheme'
 import { useFontManager } from './composables/useFontManager'
 import { useStore } from './composables/useStore'
+import InstallPrompt from './components/InstallPrompt.vue'
 
 const { isDark } = useTheme()
 const { settings } = useStore()
@@ -192,7 +193,9 @@ onUnmounted(() => {
       position="top-right"
       :theme="isDark ? 'dark' : 'light'"
       rich-colors
+      :duration="3000"
     />
+    <InstallPrompt />
   </div>
 </template>
 

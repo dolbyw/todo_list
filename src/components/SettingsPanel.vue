@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <!-- 标题 -->
-    <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
       <h2 class="text-xl font-bold text-gray-900 dark:text-white">设置</h2>
       <button
         @click="$emit('close')"
@@ -12,7 +12,7 @@
     </div>
 
     <!-- 设置内容区域 -->
-    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+    <div class="flex-1 overflow-y-auto p-6 space-y-6 min-h-0">
 
     <!-- WebDAV设置 -->
     <div class="space-y-4">
@@ -130,7 +130,7 @@
           <div 
             v-for="font in fontOptions" 
             :key="font.value"
-            @click="localSettings.fontFamily = font.value"
+            @click="localSettings.fontFamily = font.value as FontFamily"
             class="liquid-glass flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105"
             :class="{
               'liquid-button': localSettings.fontFamily === font.value,
@@ -138,7 +138,7 @@
             }"
           >
             <div class="flex flex-col">
-              <span class="text-sm font-medium text-white">{{ font.label }}</span>
+              <span class="text-sm font-medium text-white" :style="{ fontFamily: font.value }">{{ font.label }}</span>
               <span class="text-xs text-gray-300">{{ font.description }}</span>
             </div>
             <div 
@@ -199,6 +199,14 @@
           <Download class="w-4 h-4" />
           导出数据
         </button>
+
+        <button
+          @click="clearCache"
+          class="liquid-glass liquid-button w-full flex items-center justify-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+        >
+          <Trash2 class="w-4 h-4" />
+          清理缓存
+        </button>
         
         <button
           @click="importData"
@@ -221,7 +229,7 @@
     </div>
 
     <!-- 保存按钮区域 -->
-    <div class="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
+    <div class="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
       <div class="flex gap-3">
         <button
           @click="$emit('close')"
@@ -243,8 +251,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from 'vue'
-import { X, Wifi, CheckCircle, XCircle, Download, Upload } from 'lucide-vue-next'
-import type { AppSettings } from '../types'
+import { X, Wifi, CheckCircle, XCircle, Download, Upload, Trash2 } from 'lucide-vue-next'
+import type { AppSettings, FontFamily } from '../types'
 import { useStore } from '../composables/useStore'
 import { useFontManager } from '../composables/useFontManager'
 import { storageService } from '../services/storage'
@@ -265,7 +273,19 @@ const {
 } = useStore()
 
 // 字体管理
-const { fontOptions, applyFont } = useFontManager()
+const { applyFont } = useFontManager()
+const fontOptions = [
+  {
+    value: 'System',
+    label: '系统默认',
+    description: '跟随操作系统设置'
+  },
+  {
+    value: 'MiSans',
+    label: 'MiSans',
+    description: '小米定制字体，清晰优雅'
+  }
+]
 
 // 本地设置副本
 const localSettings = reactive<AppSettings>({
@@ -378,6 +398,18 @@ const exportData = () => {
   URL.revokeObjectURL(url)
   
   toast.success('数据导出成功')
+}
+
+/**
+ * 清理缓存
+ */
+const clearCache = () => {
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' })
+    toast.success('缓存清理指令已发送。应用将在刷新后使用最新版本。')
+  } else {
+    toast.error('无法清理缓存：Service Worker 未激活。')
+  }
 }
 
 /**

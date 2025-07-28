@@ -10,14 +10,14 @@ export function useFontManager() {
    */
   const fontOptions = [
     {
-      value: 'MiSans' as FontFamily,
-      label: 'MiSans',
-      description: '小米兰亭字体，现代简洁'
+      value: 'System' as FontFamily,
+      label: '系统默认',
+      description: '跟随操作系统设置'
     },
     {
-      value: 'System' as FontFamily,
-      label: '系统字体',
-      description: '使用系统默认字体'
+      value: 'MiSans' as FontFamily,
+      label: 'MiSans',
+      description: '小米定制字体，清晰优雅'
     }
   ]
 
@@ -27,13 +27,11 @@ export function useFontManager() {
   const getFontFamilyCSS = (fontFamily: FontFamily): string => {
     switch (fontFamily) {
       case 'MiSans':
-        return "'MiSans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"
-      case 'Inter':
-        return "Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"
+        return "'MiSans', system-ui, Avenir, Helvetica, Arial, sans-serif"
       case 'System':
         return "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
       default:
-        return "'MiSans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"
+        return "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
     }
   }
 

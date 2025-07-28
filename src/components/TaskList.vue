@@ -47,10 +47,8 @@
           @click="showSettings = false"
         ></div>
         <!-- 设置面板容器 -->
-        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
-          <div class="h-full">
-            <SettingsPanel @close="showSettings = false" />
-          </div>
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] flex flex-col">
+          <SettingsPanel @close="showSettings = false" class="flex-1 min-h-0" />
         </div>
       </div>
 
@@ -108,7 +106,9 @@
 
     <!-- 任务列表 -->
     <div class="flex-1 overflow-y-auto p-4">
-      <div v-if="filteredAndSortedTasks.length === 0" class="text-center py-12">
+      <SkeletonLoader v-if="loading" />
+
+      <div v-else-if="filteredAndSortedTasks.length === 0" class="text-center py-12">
         <div class="text-gray-100">
           <CheckCircle class="w-16 h-16 mx-auto mb-4 opacity-60" />
           <p class="text-lg font-medium mb-2 text-white">{{ currentTasks.length === 0 ? '还没有任务' : '没有符合条件的任务' }}</p>
@@ -247,15 +247,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, defineAsyncComponent } from 'vue'
 import { Plus, CheckCircle, Edit2, Trash2, HelpCircle, Settings } from 'lucide-vue-next'
 import { useStore } from '../composables/useStore'
 import { TaskPriority } from '../types'
-import SettingsPanel from './SettingsPanel.vue'
+const SettingsPanel = defineAsyncComponent(() => import('./SettingsPanel.vue'))
 import SnowControl from './SnowControl.vue'
+import SkeletonLoader from './SkeletonLoader.vue'
 
 const store = useStore()
-const { currentList, currentTasks, createTask, updateTask, deleteTask, toggleTaskStatus } = store
+const { currentList, currentTasks, createTask, updateTask, deleteTask, toggleTaskStatus, loading } = store
 
 // 响应式数据
 const newTaskTitle = ref('')
