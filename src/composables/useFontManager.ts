@@ -15,11 +15,6 @@ export function useFontManager() {
       description: '小米兰亭字体，现代简洁'
     },
     {
-      value: 'Inter' as FontFamily,
-      label: 'Inter',
-      description: '经典无衬线字体，清晰易读'
-    },
-    {
       value: 'System' as FontFamily,
       label: '系统字体',
       description: '使用系统默认字体'

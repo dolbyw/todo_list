@@ -1,17 +1,18 @@
 <template>
-  <div class="space-y-6">
-    <!-- 头部 -->
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold text-white">
-        设置
-      </h2>
+  <div class="h-full flex flex-col">
+    <!-- 标题 -->
+    <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white">设置</h2>
       <button
-        @click="emit('close')"
-        class="p-2 text-gray-200 hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        @click="$emit('close')"
+        class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
         <X class="w-5 h-5" />
       </button>
     </div>
+
+    <!-- 设置内容区域 -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
 
     <!-- WebDAV设置 -->
     <div class="space-y-4">
@@ -209,30 +210,34 @@
       </div>
     </div>
 
-    <!-- 保存按钮 -->
-    <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-      <button
-        @click="emit('close')"
-        class="liquid-glass liquid-button px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-      >
-        取消
-      </button>
-      <button
-        @click="saveSettings"
-        class="liquid-glass liquid-button px-4 py-2 text-white rounded-lg transition-colors"
-      >
-        保存设置
-      </button>
+      <!-- 隐藏的文件输入 -->
+      <input
+        ref="fileInput"
+        type="file"
+        accept=".json"
+        class="hidden"
+        @change="handleFileImport"
+      />
     </div>
 
-    <!-- 隐藏的文件输入 -->
-    <input
-      ref="fileInput"
-      type="file"
-      accept=".json"
-      class="hidden"
-      @change="handleFileImport"
-    />
+    <!-- 保存按钮区域 -->
+    <div class="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
+      <div class="flex gap-3">
+        <button
+          @click="$emit('close')"
+          class="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+        >
+          取消
+        </button>
+        <button
+          @click="saveSettings"
+          :disabled="isSaving"
+          class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {{ isSaving ? '保存中...' : '保存设置' }}
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -279,6 +284,7 @@ watch(
 const isTestingConnection = ref(false)
 const connectionTestResult = ref<boolean | null>(null)
 const fileInput = ref<HTMLInputElement>()
+const isSaving = ref(false)
 
 // 计算属性
 const canTestConnection = computed(() => {
@@ -339,11 +345,14 @@ const saveSettings = async () => {
   }
   
   try {
+    isSaving.value = true
     await updateSettings(settingsToSave)
     emit('close')
   } catch (error) {
     console.error('Save settings failed:', error)
     toast.error('保存设置失败，请重试')
+  } finally {
+    isSaving.value = false
   }
 }
 

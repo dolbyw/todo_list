@@ -47,8 +47,8 @@
           @click="showSettings = false"
         ></div>
         <!-- 设置面板容器 -->
-        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-          <div class="p-6">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+          <div class="h-full">
             <SettingsPanel @close="showSettings = false" />
           </div>
         </div>
