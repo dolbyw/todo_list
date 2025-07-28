@@ -2,6 +2,8 @@
 @import './styles/fonts.css';
 /* 导入液态玻璃效果样式 */
 @import './styles/liquid-glass.css';
+/* 导入响应式设计样式 */
+@import './styles/responsive.css';
 
 @tailwind base;
 @tailwind components;
@@ -21,6 +23,20 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  
+  /* 多端兼容性 */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  
+  /* 安全区域适配 */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-right: env(safe-area-inset-right);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
 }
 
 body {
@@ -28,6 +44,16 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  
+  /* 移动端优化 */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  
+  /* 安全区域适配 */
+  padding-top: var(--safe-area-inset-top);
+  padding-right: var(--safe-area-inset-right);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
 }
 
 html {
@@ -38,6 +64,12 @@ html {
 #app {
   @apply bg-black;
   min-height: 100vh;
+  min-height: 100dvh; /* 动态视口高度 */
+  
+  /* 响应式容器 */
+  width: 100%;
+  max-width: 100vw;
+  position: relative;
 }
 
 /* 移除所有元素的点击时outline和focus效果 */

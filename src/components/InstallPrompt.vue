@@ -1,7 +1,7 @@
 <template>
   <div v-if="showPrompt" class="fixed bottom-4 right-4 z-50 p-4 bg-white rounded-lg shadow-lg flex items-center space-x-4 dark:bg-gray-800">
     <div class="flex-shrink-0">
-      <img class="h-10 w-10" src="/favicon.svg" alt="App Logo">
+      <img class="h-10 w-10" src="/pwa-192x192.png" alt="App Logo">
     </div>
     <div>
       <p class="font-semibold text-gray-900 dark:text-white">安装 Todo App</p>
@@ -42,6 +42,7 @@ onMounted(() => {
     deferredPrompt = e
     // 显示我们的自定义安装提示
     showPrompt.value = true
+    console.log('用户接受了安装提示')
   })
 })
 

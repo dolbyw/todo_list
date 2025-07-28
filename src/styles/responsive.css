@@ -1,0 +1,173 @@
+/* 响应式设计工具类 */
+
+/* 基础响应式断点 */
+@media (max-width: 640px) {
+  .responsive-text {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .responsive-padding {
+    padding: 0.75rem;
+  }
+  
+  .responsive-margin {
+    margin: 0.5rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .responsive-text {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  
+  .responsive-padding {
+    padding: 1rem;
+  }
+  
+  .responsive-margin {
+    margin: 0.75rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .responsive-text {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  
+  .responsive-padding {
+    padding: 1.5rem;
+  }
+  
+  .responsive-margin {
+    margin: 1rem;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
+  }
+  
+  .touch-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* 高分辨率屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .high-dpi-text {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .landscape-compact {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .landscape-header {
+    height: 3rem;
+  }
+}
+
+/* 竖屏适配 */
+@media (orientation: portrait) {
+  .portrait-layout {
+    flex-direction: column;
+  }
+}
+
+/* 超宽屏适配 */
+@media (min-width: 1920px) {
+  .ultra-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* 小屏设备（如智能手表）适配 */
+@media (max-width: 320px) {
+  .tiny-screen {
+    font-size: 0.75rem;
+    padding: 0.25rem;
+  }
+  
+  .tiny-button {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* 大屏设备适配 */
+@media (min-width: 2560px) {
+  .large-screen {
+    font-size: 1.25rem;
+    line-height: 2rem;
+  }
+}
+
+/* 可访问性 - 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    background-color: #000000;
+    color: rgba(255, 255, 255, 0.87);
+  }
+}
+
+/* 浅色模式适配 */
+@media (prefers-color-scheme: light) {
+  .auto-light {
+    background-color: #ffffff;
+    color: rgba(0, 0, 0, 0.87);
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .high-contrast {
+    border: 2px solid currentColor;
+    background-color: transparent;
+  }
+}
+
+/* 安全区域工具类 */
+.safe-area-top {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.safe-area-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.safe-area-left {
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
+
+.safe-area-right {
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+.safe-area-all {
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
